@@ -175,6 +175,14 @@
     display: flex;
     justify-content: center;
   }
+
+  .media-section iframe {
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    border: 0;
+  }
   .instructions {
     background-color: #0F4F84;
     color: white;
@@ -290,9 +298,54 @@
     color: white;
   }
 
-  
+  /* Responsive adjustments */
+  @media (max-width: 900px) {
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
 
+    .nav-links {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-  
-  
-  
+    .logo {
+      height: 72px;
+    }
+
+    .main-content {
+      flex-direction: column;
+      padding: 15px;
+    }
+
+    .dropDown {
+      width: 100%;
+      min-width: 0;
+      margin-left: 0;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .nav-links {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .nav-links li a {
+      display: block;
+      width: 100%;
+    }
+
+    .main-title {
+      font-size: 1.5rem;
+    }
+
+    .related-activities img {
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+    }
+  }

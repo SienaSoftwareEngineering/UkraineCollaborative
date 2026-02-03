@@ -287,3 +287,53 @@ input:checked + .slider:before {
   font-weight: bold;
   color: white;
 }
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .logo {
+    height: 72px;
+  }
+
+  .main-content {
+    flex-direction: column;
+    margin: 20px;
+  }
+
+  .dropDown {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  nav ul li a {
+    display: block;
+    width: 100%;
+  }
+
+  .main-content {
+    margin: 15px;
+  }
+
+  .about-us-section {
+    padding: 30px 10px;
+  }
+}

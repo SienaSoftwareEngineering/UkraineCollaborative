@@ -3,8 +3,8 @@
   const toggle = document.getElementById('langToggle');
   if (!toggle) return;
 
-  const path = window.location.pathname;               // e.g. /about.html or /UK/techniques/pair-grounding-ukr.html
-  const isUkr = path.startsWith('/UK/');               // NOTE: folder name is case-sensitive
+  const path = window.location.pathname;
+  const isUkr = /\/uk\//i.test(path) || /-ukr\.html$/i.test(path);
   toggle.checked = isUkr;
 
   // Helpers to add/remove "-ukr" before ".html"
@@ -17,18 +17,22 @@
     return p.replace(/-ukr(?=\.html$)/i, '');
   }
 
-  // Build Ukrainian counterpart of a path: ensure /UK/ prefix + -ukr.html
+  // Build Ukrainian counterpart of a path: ensure /uk/ segment + -ukr.html
   function toUkrPath(p) {
     let out = p;
-    if (!out.startsWith('/UK/')) out = '/UK' + (out.startsWith('/') ? out : '/' + out);
+    if (/\/techniques\//i.test(out)) {
+      out = out.replace(/\/techniques\//i, '/uk/techniques/');
+    } else if (!/\/uk\//i.test(out)) {
+      out = out.replace(/\/([^/]+\.html)$/i, '/uk/$1');
+    }
     out = addUkrSuffix(out);
     return out;
   }
 
-  // Build English counterpart of a path: strip /UK/ + remove -ukr
+  // Build English counterpart of a path: strip /uk/ + remove -ukr
   function toEngPath(p) {
-    let out = p.replace(/^\/UK\//, '/');
-    out = removeUkrSuffix(out);
+    let out = removeUkrSuffix(p);
+    out = out.replace(/\/uk\//i, '/');
     return out;
   }
 
@@ -38,22 +42,4 @@
     const target = toggle.checked ? toUkrPath(path) : toEngPath(path);
     window.location.assign(target + qh);
   });
-
-  // -------- Link Rewriter --------
-  // When in UKR mode, rewrite links like /about.html -> /UK/about-ukr.html
-  // When in EN mode, rewrite links like /UK/about-ukr.html -> /about.html
-  function rewriteLinks(forUkr) {
-    const anchors = document.querySelectorAll('a[href$=".html"]');
-    anchors.forEach(a => {
-      const raw = a.getAttribute('href');
-      if (!raw || raw.startsWith('http') || raw.startsWith('mailto:') || raw.startsWith('#')) return;
-
-      // Resolve to an absolute URL so we can safely read pathname/search/hash
-      const u = new URL(raw, window.location.origin + window.location.pathname);
-      const newPath = forUkr ? toUkrPath(u.pathname) : toEngPath(u.pathname);
-      a.setAttribute('href', newPath + u.search + u.hash);
-    });
-  }
-
-  rewriteLinks(isUkr);
 })();
